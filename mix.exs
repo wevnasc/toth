@@ -6,6 +6,7 @@ defmodule Toth.MixProject do
       app: :toth,
       version: "0.1.0",
       elixir: "~> 1.10",
+      escript: [main_module: Toth.CLI],
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
