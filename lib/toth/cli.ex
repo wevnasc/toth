@@ -25,6 +25,14 @@ defmodule Toth.CLI do
     |> Enum.map(&(String.trim(&1)))
   end
 
+  def split_by(:chars, text) do
+    text
+    |> String.trim
+    |> String.split("")
+    |> Enum.map(&(String.trim(&1)))
+    |> Enum.filter(&(&1 != ""))
+  end
+
   def process(text, flags) do
     Enum.map(flags, fn flag ->
       {flag, split_by(flag, text) |> Enum.count}

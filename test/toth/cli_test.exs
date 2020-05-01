@@ -24,7 +24,14 @@ defmodule Toth.CLITest do
     """) == ["2020 is the year", "my email is some@example.com", "thanks :D"]
   end
 
+  test "should retun a list with all chars in the file" do
+    assert Toth.CLI.split_by(:chars, "Hi how are you?") == ["H", "i", "h", "o", "w", "a", "r", "e", "y", "o", "u", "?"]
+    assert Toth.CLI.split_by(:chars, "2020") == ["2", "0", "2", "0"]
+    assert Toth.CLI.split_by(:chars, "name's") == ["n", "a" ,"m", "e", "'", "s"]
+  end
+
   test "should return quantity by flag" do
     assert Toth.CLI.process("how many items here", [:words]) == [{:words, 4}]
   end
+
 end
