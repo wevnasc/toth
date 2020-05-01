@@ -37,7 +37,24 @@ defmodule Toth.CLI do
     |> IO.puts
   end
 
-  def start(file_path, flags) do
+  def show_help() do
+    IO.puts """
+    TOTH HELP!
+
+    you can use the following commands:
+
+    -c to show the chars quantity
+    -l to show the lines quantity
+    -w to show the words quantity
+
+    example:
+    toth "file path" -c -l -w
+    """
+  end
+
+  def start([], _), do: show_help()
+
+  def start([file_path|_], flags) do
     File.read!(file_path)
     |> process(flags)
     |> show
@@ -46,10 +63,15 @@ defmodule Toth.CLI do
   def main(args) do
     {parsed, args, invalid} = OptionParser.parse(
       args,
-      switches: [chars: nil, lines: nil, words: nil],
-      aliases: [c: :chars, l: :lines, w: :words])
+      switches: [chars: nil, lines: nil, words: nil, help: nil],
+      aliases: [c: :chars, l: :lines, w: :words, h: :help])
 
-    start(hd(args), parsed)
+    if not Enum.member?(parsed, {:help, true}) and Enum.empty?(invalid) do
+      start(args, parsed)
+    else
+      show_help()
+    end
+
   end
 
 end
