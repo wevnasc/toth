@@ -31,7 +31,7 @@ defmodule Toth.CLITest do
   end
 
   test "should return quantity by flag" do
-    assert Toth.CLI.process("how many items here", [:words]) == [{:words, 4}]
+    assert Toth.CLI.process("how many items here", [{:words, true}, {:lines, true}, {:chars, true}]) == [{:words, 4}, {:lines, 1}, {:chars, 16}]
   end
 
 end

@@ -1,14 +1,5 @@
 defmodule Toth.CLI do
 
-  def main(args) do
-    {parsed, args, invalid} = OptionParser.parse(
-      args,
-      switches: [chars: nil, lines: nil, words: nil],
-      aliases: [c: :chars, l: :lines, w: :words])
-
-    IO.inspect {parsed, args, invalid}
-  end
-
   def split_by(:words, text) do
     text
     |> String.trim
@@ -34,9 +25,31 @@ defmodule Toth.CLI do
   end
 
   def process(text, flags) do
-    Enum.map(flags, fn flag ->
+    Enum.map(flags, fn {flag, _} ->
       {flag, split_by(flag, text) |> Enum.count}
     end)
+  end
+
+  def show(output) do
+    Enum.reduce(output, "", fn ({flag, value}, acc) ->
+      acc <> "#{flag} => #{value}\n"
+    end)
+    |> IO.puts
+  end
+
+  def start(file_path, flags) do
+    File.read!(file_path)
+    |> process(flags)
+    |> show
+  end
+
+  def main(args) do
+    {parsed, args, invalid} = OptionParser.parse(
+      args,
+      switches: [chars: nil, lines: nil, words: nil],
+      aliases: [c: :chars, l: :lines, w: :words])
+
+    start(hd(args), parsed)
   end
 
 end
